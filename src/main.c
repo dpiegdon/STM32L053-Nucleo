@@ -3,13 +3,11 @@
 
 int main(void)
 {
-	int i = 0;
-
-	BSP_LED_Init(LED_GREEN);
+	BSP_LED_Init(LED2);
 
 	for(;;)
 	{
-		BSP_LED_Toggle(LED_GREEN);
+		BSP_LED_Toggle(LED2);
 
 		for (int j = 0; j < 100000; j++)
 			;
