@@ -1,12 +1,10 @@
 #######################################################################
-# Makefile for STM32L053R8T6 projects
-#
-# STM32L053R8T6 has 8KB RAM
+# Makefile for STM32L053R8T6 Nucleo projects
 
 PROJECT = main
 CUBE_PATH ?= STM32CubeL0
-OPENOCD_SCRIPT_DIR ?= /usr/share/openocd/scripts
 HEAP_SIZE = 0x100
+FLASH_OFFSET=0x08000000
 
 ################
 # Sources
@@ -52,7 +50,6 @@ READELF = $(PREFIX)-readelf
 SIZE = $(PREFIX)-size
 GDB = $(PREFIX)-gdb
 RM = rm -f
-OPENOCD=openocd
 
 ################
 # Compiler options
@@ -97,7 +94,7 @@ JLINK_CPUNAME ?= STM32L053R8
 flash-bmp: $(PROJECT).elf
 	# assuming:
 	#  * Black Magic Probe connected to $(BMP_DEVICE)
-	#  * compatible Nordic MCU connected via SWD
+	#  * compatible board connected via SWD
 	$(GDB) $(PROJECT).elf \
 		-ex 'set confirm off' \
 		-ex 'target extended-remote $(BMP_DEVICE)' \
@@ -110,11 +107,11 @@ flash-bmp: $(PROJECT).elf
 
 flash-jlink: $(PROJECT).bin
 	# assuming:
-	#  * any type of Segger JLINK that is usable with an nRF52 CPU
+	#  * any type of Segger JLINK that is usable with an STM32
 	#    (e.g. the embedded jlink on the DK)
-	#  * compatible Nordic MCU connected via SWD
+	#  * compatible board connected via SWD
 	#  * installed JLink Software
-	printf "erase\nloadfile $<\nr\nq\n" | JLinkExe -nogui 1 -autoconnect 1 -device $(JLINK_CPUNAME) -if swd -speed 4000
+	printf "erase\nloadfile $< ${FLASH_OFFSET}\nr\nq\n" | JLinkExe -nogui 1 -autoconnect 1 -device $(JLINK_CPUNAME) -if swd -speed 4000
 
 erase-jlink:
 	printf "erase\nr\nq\n" | JLinkExe -nogui 1 -autoconnect 1 -device $(JLINK_CPUNAME) -if swd -speed 4000
