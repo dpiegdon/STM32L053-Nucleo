@@ -79,6 +79,7 @@ CFLAGS += $(DEFINES) $(MCUFLAGS) $(DEBUG_OPTIMIZE_FLAGS) $(CFLAGS_EXTRA) $(INCLU
 LDFLAGS = -static $(MCUFLAGS)
 LDFLAGS += -Wl,--start-group -lgcc -lm -lc -lg -lstdc++ -lsupc++ -Wl,--end-group
 LDFLAGS += -Wl,--gc-sections -Wl,--print-gc-sections -Wl,--cref,-Map=$(@:%.elf=%.map)
+LDFLAGS += -Wl,--print-memory-usage
 LDFLAGS += -L ${CUBE_PATH}/Projects/NUCLEO-L053R8/Templates/SW4STM32/STM32L053R8_NUCLEO/ -T STM32L053R8Tx_FLASH.ld
 
 ################
